@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -82,59 +81,55 @@ class _AddReportScreenState extends State<AddReportScreen> {
   }
 
   void validate() {
-    try {
-      if (selectedImage == null) {
-        throw 'Please select an image.';
-      }
-
-      if (_fullNameController.text.isEmpty) {
-        throw 'Name Field Cannot be empty.';
-      }
-
-      if (_ageController.text.isEmpty) {
-        throw 'Age Field Cannot be empty.';
-      }
-
-      if (_parentNameController.text.isEmpty) {
-        throw 'Parent Name Field Cannot be empty.';
-      }
-
-      if (_parentContactController.text.isEmpty) {
-        throw 'Please Provide Parent/Guardian contact number.';
-      }
-
-      if (_addressController.text.isEmpty) {
-        throw 'Please provide valid address.';
-      }
-
-      if (_pincodeController.text.isEmpty) {
-        throw 'Pincode field cannot be empty.';
-      }
-
-      if (_cityController.text.isEmpty) {
-        throw 'Invalid city field.';
-      }
-
-      if (_districtController.text.isEmpty) {
-        throw 'Invalid district field.';
-      }
-
-      if (_stateController.text.isEmpty) {
-        throw 'Invalid state field.';
-      }
-
-      if (_pomController.text.isEmpty) {
-        throw 'Please provide place of missing.';
-      }
-
-      if (_domController.text.isEmpty) {
-        throw 'Please provide date of missing.';
-      }
-
-      addDocument();
-    } catch (e) {
-      print(e);
+    if (selectedImage == null) {
+      throw 'Please select an image.';
     }
+
+    if (_fullNameController.text.isEmpty) {
+      throw 'Name Field Cannot be empty.';
+    }
+
+    if (_ageController.text.isEmpty) {
+      throw 'Age Field Cannot be empty.';
+    }
+
+    if (_parentNameController.text.isEmpty) {
+      throw 'Parent Name Field Cannot be empty.';
+    }
+
+    if (_parentContactController.text.length != 10) {
+      throw 'Please Provide Parent/Guardian contact number.';
+    }
+
+    if (_addressController.text.isEmpty) {
+      throw 'Please provide valid address.';
+    }
+
+    if (_pincodeController.text.length != 6) {
+      throw 'Pincode field cannot be empty.';
+    }
+
+    if (_cityController.text.isEmpty) {
+      throw 'Invalid city field.';
+    }
+
+    if (_districtController.text.isEmpty) {
+      throw 'Invalid district field.';
+    }
+
+    if (_stateController.text.isEmpty) {
+      throw 'Invalid state field.';
+    }
+
+    if (_pomController.text.isEmpty) {
+      throw 'Please provide place of missing.';
+    }
+
+    if (_domController.text.isEmpty) {
+      throw 'Please provide date of missing.';
+    }
+
+    addDocument();
   }
 
   void addDocument() {
@@ -181,17 +176,9 @@ class _AddReportScreenState extends State<AddReportScreen> {
   Future<String?> uploadImage(String id) async {
     final path = '$id.jpg';
     final newRef = _storage.child(path);
-    try {
-      if (selectedImage != null) {
-        await newRef.putFile(selectedImage!);
-        print('Successfully uploaded');
-        return path;
-      }
-      return null;
-    } catch (e) {
-      print(e);
-      return null;
-    }
+    await newRef.putFile(selectedImage!);
+    print('Successfully uploaded');
+    return path;
   }
 
   @override
@@ -567,8 +554,12 @@ class _AddReportScreenState extends State<AddReportScreen> {
                 textColor: themeColor,
               ),
               MyElevatedButton(
-                  onPress: () async {
-                    validate();
+                  onPress: () {
+                    try {
+                      validate();
+                    } catch (e) {
+                      print(e);
+                    }
                   },
                   buttonLabel: 'Submit',
                   w: w / 2),
