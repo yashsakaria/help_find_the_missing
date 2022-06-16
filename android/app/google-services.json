@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1021129795084",
+    "project_id": "find-the-missing-587f9",
+    "storage_bucket": "find-the-missing-587f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021129795084:android:ffaac7721f5b6314e53029",
+        "android_client_info": {
+          "package_name": "com.example.help_find_the_missing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021129795084-f7moabdasf452upi8p53ssltnqk9ifne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-ft7Bs4gkCTkW1mKd0Hm8td92ELFYzls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1021129795084-f7moabdasf452upi8p53ssltnqk9ifne.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
