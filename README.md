@@ -1,16 +1,14 @@
 # help_find_the_missing
 
-A new Flutter project.
+A platform to generate, view, report information and disseminate the information on missing people/children.
 
-## Getting Started
+## Tech-Stack
+- [Flutter](https://flutter.dev/) as our base language/framework for cross-platform support.
+- [Firebase](https://firebase.google.com/) for User authentication, Data Storage and Database
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Aim
+- [x] Maintain two distinct user base. 
+    - An Authorised user to generate report and general user to submit information.
+- [x] Develop an UI for the authorised user to generate/add a new report.
+- [ ] Use face matching to compare the image proof submitted by the user with the image from the database.
+- [ ] Calculate Distance based on the co ordinated.
