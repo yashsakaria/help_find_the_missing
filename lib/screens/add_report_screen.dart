@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_print, use_key_in_widget_constructors
+
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -98,7 +101,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
     }
 
     if (_parentContactController.text.length != 10) {
-      throw 'Please Provide Parent/Guardian contact number.';
+      throw 'Please provide valid Parent/Guardian contact number.';
     }
 
     if (_addressController.text.isEmpty) {
@@ -106,7 +109,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
     }
 
     if (_pincodeController.text.length != 6) {
-      throw 'Pincode field cannot be empty.';
+      throw 'Please provide valid pincode.';
     }
 
     if (_cityController.text.isEmpty) {
@@ -174,10 +177,11 @@ class _AddReportScreenState extends State<AddReportScreen> {
   }
 
   Future<String?> uploadImage(String id) async {
-    final path = '$id.jpg';
+    var path = '$id.jpg';
     final newRef = _storage.child(path);
     await newRef.putFile(selectedImage!);
     print('Successfully uploaded');
+    path = await newRef.getDownloadURL();
     return path;
   }
 
@@ -203,14 +207,19 @@ class _AddReportScreenState extends State<AddReportScreen> {
             child: SizedBox(
               height: 200,
               width: 200,
-              child: (selectedImage == null)
-                  ? Image.asset(
-                      'images/no_image.jpg',
-                    )
-                  : Image.file(
-                      selectedImage!,
-                      fit: BoxFit.contain,
-                    ),
+              child: ClipRRect(
+                borderRadius: kDefaultBorderRadius,
+                child: (selectedImage == null)
+                    ? Image.asset(
+                        'images/no_image.jpg',
+                      )
+                    : Image.file(
+                        selectedImage!,
+                        height: 200,
+                        width: 200,
+                        fit: BoxFit.contain,
+                      ),
+              ),
             ),
             onTap: () {
               showModalBottomSheet(
@@ -420,7 +429,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
             ],
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Provide Valid Contact Number',
+              hintText: 'Provide Valid Pincode',
             ),
           ),
           const myLabelWidget(labelName: 'City/Town'),
@@ -554,11 +563,73 @@ class _AddReportScreenState extends State<AddReportScreen> {
                 textColor: themeColor,
               ),
               MyElevatedButton(
-                  onPress: () {
+                  onPress: () async {
                     try {
                       validate();
+                      await showDialog(
+                        context: context,
+                        builder: (BuildContext context) => CupertinoAlertDialog(
+                          title: const Text(
+                            'Success',
+                            style: TextStyle(
+                              fontSize: 24,
+                            ),
+                          ),
+                          content: const Text(
+                            'Report has been generated successfully',
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                'OK',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
                     } catch (e) {
                       print(e);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => CupertinoAlertDialog(
+                          title: const Text(
+                            'Error',
+                            style: TextStyle(
+                              fontSize: 24,
+                            ),
+                          ),
+                          content: Text(
+                            e.toString(),
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                'OK',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
                     }
                   },
                   buttonLabel: 'Submit',

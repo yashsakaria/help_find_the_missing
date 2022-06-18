@@ -18,3 +18,5 @@ InputDecoration kTextFieldDecoration = InputDecoration(
     fontSize: 12.0,
   ),
 );
+
+const kDefaultBorderRadius = BorderRadius.all(Radius.circular(20.0));
