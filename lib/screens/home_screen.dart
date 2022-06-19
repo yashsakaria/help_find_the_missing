@@ -6,13 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:help_find_the_missing/constants.dart';
-import 'package:help_find_the_missing/screens/missing_person_info.dart';
 import 'package:help_find_the_missing/screens/search_person_screen.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:help_find_the_missing/screens/add_report_screen.dart';
-
-import '../build_image.dart';
+import 'package:help_find_the_missing/missing_person_card.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
@@ -70,10 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SearchPerson())
-                );
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SearchPerson()));
               },
               icon: const Icon(Icons.search),
             ),
@@ -178,82 +174,5 @@ class MissingPersonStream extends StatelessWidget {
             );
           }
         });
-  }
-}
-
-class MissingPersonCard extends StatelessWidget {
-  final QueryDocumentSnapshot<Object?> doc;
-  const MissingPersonCard({required this.doc});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Material(
-        elevation: 4,
-        borderRadius: kDefaultBorderRadius,
-        child: GestureDetector(
-          child: Container(
-            height: 110,
-            decoration: const BoxDecoration(
-              // color: themeColor,
-              borderRadius: kDefaultBorderRadius,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  BuildImage(
-                      imageURL: (doc['image'] != null)
-                          ? doc['image']
-                          : 'no_image.jpg'),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          doc.get('name'),
-                          style: const TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              doc.get('gender'),
-                              style: const TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Text(
-                              doc.get('age').toString(),
-                              style: const TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MissingPersonInfo(doc: doc),
-              ),
-            );
-          },
-        ),
-      ),
-    );
   }
 }

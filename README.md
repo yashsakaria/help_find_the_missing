@@ -10,5 +10,7 @@ A platform to generate, view, report information and disseminate the information
 - [x] Maintain two distinct user base. 
     - An Authorised user to generate report and general user to submit information.
 - [x] Develop an UI for the authorised user to generate/add a new report.
-- [ ] Use face matching to compare the image proof submitted by the user with the image from the database.
-- [ ] Calculate Distance based on the co ordinated.
+- [x] Use face matching to compare the image proof submitted by the user with the image from the database.
+- [x] Calculate Distance based on the co ordinated.
+- [ ] Improve UI.
+- [ ] Enable User to provide feedback on the reports.

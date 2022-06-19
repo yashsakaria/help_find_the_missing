@@ -682,6 +682,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
                           ],
                         ),
                       );
+                      Navigator.of(context).pop();
                     } catch (e) {
                       print(e);
                       showDialog(

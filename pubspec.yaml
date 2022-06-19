@@ -36,7 +36,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   geolocator: ^8.2.1
   flutter_face_api: ^3.2.3
-  http: ^0.13.4
   flutter_cache_manager: ^3.3.0
   haversine_distance: ^1.2.1
 
