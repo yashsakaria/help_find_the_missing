@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:help_find_the_missing/constants.dart';
 import 'package:help_find_the_missing/screens/missing_person_info.dart';
+import 'package:help_find_the_missing/screens/search_person_screen.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:help_find_the_missing/screens/add_report_screen.dart';
@@ -68,7 +69,12 @@ class _HomeScreenState extends State<HomeScreen> {
           title: const Text('Hello'),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchPerson())
+                );
+              },
               icon: const Icon(Icons.search),
             ),
             IconButton(
