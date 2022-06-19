@@ -10,10 +10,13 @@ import 'package:help_find_the_missing/my_elevated_button.dart';
 import 'package:help_find_the_missing/my_label_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
+final _database = FirebaseDatabase.instance.refFromURL(
+    'https://find-the-missing-587f9-default-rtdb.asia-southeast1.firebasedatabase.app');
 final _storage = FirebaseStorage.instance.ref();
 late User loggedInUser;
 
@@ -28,11 +31,14 @@ class _AddReportScreenState extends State<AddReportScreen> {
   final ImagePicker _picker = ImagePicker();
   File? selectedImage;
 
+  late DataSnapshot snapshot;
   var selectedHeightRange = const RangeValues(100, 120);
   var selectedWeight = 50.0;
   DateTime selectedDate = DateTime.now();
 
   String gender = 'Male';
+  List<String> areas = ['Invalid Pincode'];
+  String selectedArea = 'Invalid Pincode';
 
   final _fullNameController = TextEditingController();
   final _ageController = TextEditingController();
@@ -58,7 +64,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
     getCurrentUser();
   }
 
-  void getCurrentUser() {
+  void getCurrentUser() async {
     try {
       final user = _auth.currentUser;
       if (user != null) {
@@ -67,6 +73,11 @@ class _AddReportScreenState extends State<AddReportScreen> {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future updateSnapshot(String key) async {
+    print('shere');
+    snapshot = await _database.child(key).get();
   }
 
   Future getImage(source) async {
@@ -112,6 +123,10 @@ class _AddReportScreenState extends State<AddReportScreen> {
       throw 'Please provide valid pincode.';
     }
 
+    if (selectedArea.compareTo('Invalid Pincode') == 0) {
+      throw 'Invalid Pincode';
+    }
+
     if (_cityController.text.isEmpty) {
       throw 'Invalid city field.';
     }
@@ -150,6 +165,17 @@ class _AddReportScreenState extends State<AddReportScreen> {
       'weight': selectedWeight.round(),
       'address': _addressController.text,
       'pincode': int.parse(_pincodeController.text),
+      'area': selectedArea,
+      'lat': double.parse(snapshot
+          .child('Areas/$selectedArea/Lat')
+          .value
+          .toString()
+          .replaceFirst(',', '.')),
+      'long': double.parse(snapshot
+          .child('Areas/$selectedArea/long')
+          .value
+          .toString()
+          .replaceFirst(',', '.')),
       'city': _cityController.text,
       'district': _districtController.text,
       'state': _stateController.text,
@@ -431,6 +457,63 @@ class _AddReportScreenState extends State<AddReportScreen> {
             decoration: kTextFieldDecoration.copyWith(
               hintText: 'Provide Valid Pincode',
             ),
+            onChanged: (newValue) async {
+              if (_pincodeController.text.length != 6) {
+                setState(() {
+                  areas = ['Invalid Pincode'];
+                  selectedArea = areas[0];
+                  _stateController.text = '';
+                  _districtController.text = '';
+                });
+              } else {
+                await updateSnapshot(_pincodeController.text);
+                if (snapshot.value != null) {
+                  areas = [];
+                  var state = snapshot.child('State').value.toString();
+                  var district = snapshot.child('District').value.toString();
+                  var localities = snapshot.child('Areas');
+                  for (var x in localities.children) {
+                    areas.add(x.key.toString());
+                  }
+                  setState(() {
+                    areas;
+                    selectedArea = areas[0];
+                    _stateController.text = state;
+                    _districtController.text = district;
+                  });
+                }
+              }
+            },
+          ),
+          const myLabelWidget(labelName: 'Area'),
+          Material(
+            elevation: 2,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            child: DropdownButton<String>(
+              value: selectedArea,
+              isExpanded: true,
+              underline: Container(
+                color: Colors.white,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedArea = newValue!;
+                });
+              },
+              items: areas.map<DropdownMenuItem<String>>((itemValue) {
+                return DropdownMenuItem(
+                  value: itemValue,
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(itemValue)
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
           ),
           const myLabelWidget(labelName: 'City/Town'),
           TextField(
@@ -442,6 +525,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
           ),
           const myLabelWidget(labelName: 'District'),
           TextField(
+            readOnly: true,
             keyboardType: TextInputType.name,
             controller: _districtController,
             decoration: kTextFieldDecoration.copyWith(
@@ -450,6 +534,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
           ),
           const myLabelWidget(labelName: 'State'),
           TextField(
+            readOnly: true,
             keyboardType: TextInputType.name,
             controller: _stateController,
             decoration: kTextFieldDecoration.copyWith(

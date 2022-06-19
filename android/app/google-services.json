@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1021129795084",
+    "firebase_url": "https://find-the-missing-587f9-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "find-the-missing-587f9",
     "storage_bucket": "find-the-missing-587f9.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1021129795084-bd5esvogdp20qtljecrj4uuh2s1duf6p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.help_find_the_missing",
+            "certificate_hash": "35e8667229732b45fd9e7437f868f850956c4fb9"
+          }
+        },
         {
           "client_id": "1021129795084-f7moabdasf452upi8p53ssltnqk9ifne.apps.googleusercontent.com",
           "client_type": 3
@@ -29,6 +38,13 @@
             {
               "client_id": "1021129795084-f7moabdasf452upi8p53ssltnqk9ifne.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1021129795084-et902fkq9uqatuf4fi4um0hdga8jmrvq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.helpFindTheMissing"
+              }
             }
           ]
         }

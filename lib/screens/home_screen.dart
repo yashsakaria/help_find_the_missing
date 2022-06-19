@@ -9,7 +9,6 @@ import 'package:help_find_the_missing/constants.dart';
 import 'package:help_find_the_missing/screens/missing_person_info.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:help_find_the_missing/screens/add_report_screen.dart';
 
 import '../build_image.dart';
@@ -68,6 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: themeColor,
           title: const Text('Hello'),
           actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.search),
+            ),
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () {
