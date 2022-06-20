@@ -1,17 +1,20 @@
 // ignore_for_file: avoid_print, use_key_in_widget_constructors
 
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:image_picker/image_picker.dart';
+
 import 'package:help_find_the_missing/constants.dart';
-import 'package:help_find_the_missing/my_elevated_button.dart';
+import 'package:help_find_the_missing/my_alert_dialog.dart';
 import 'package:help_find_the_missing/my_label_widget.dart';
+import 'package:help_find_the_missing/my_elevated_button.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
@@ -76,7 +79,6 @@ class _AddReportScreenState extends State<AddReportScreen> {
   }
 
   Future updateSnapshot(String key) async {
-    print('shere');
     snapshot = await _database.child(key).get();
   }
 
@@ -642,10 +644,12 @@ class _AddReportScreenState extends State<AddReportScreen> {
                 onPress: () {
                   Navigator.of(context).pop();
                 },
-                buttonLabel: 'Cancel',
+                buttonLabel: Text(
+                  'Cancel',
+                  style: kButtonTextStyle.copyWith(color: themeColor),
+                ),
                 w: w / 2,
                 buttonColor: greenAccent,
-                textColor: themeColor,
               ),
               MyElevatedButton(
                   onPress: () async {
@@ -653,33 +657,9 @@ class _AddReportScreenState extends State<AddReportScreen> {
                       validate();
                       await showDialog(
                         context: context,
-                        builder: (BuildContext context) => CupertinoAlertDialog(
-                          title: const Text(
-                            'Success',
-                            style: TextStyle(
-                              fontSize: 24,
-                            ),
-                          ),
-                          content: const Text(
-                            'Report has been generated successfully',
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text(
-                                'OK',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                        builder: (BuildContext context) => const MyAlertDialog(
+                          title: 'Success',
+                          content: 'Report has been generated successfully',
                         ),
                       );
                       Navigator.of(context).pop();
@@ -687,38 +667,17 @@ class _AddReportScreenState extends State<AddReportScreen> {
                       print(e);
                       showDialog(
                         context: context,
-                        builder: (BuildContext context) => CupertinoAlertDialog(
-                          title: const Text(
-                            'Error',
-                            style: TextStyle(
-                              fontSize: 24,
-                            ),
-                          ),
-                          content: Text(
-                            e.toString(),
-                            style: const TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text(
-                                'OK',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                        builder: (BuildContext context) => MyAlertDialog(
+                          title: 'Error',
+                          content: e.toString(),
                         ),
                       );
                     }
                   },
-                  buttonLabel: 'Submit',
+                  buttonLabel: const Text(
+                    'Add Report',
+                    style: kButtonTextStyle,
+                  ),
                   w: w / 2),
             ],
           ),

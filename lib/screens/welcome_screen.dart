@@ -70,8 +70,11 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   );
                 },
+                buttonLabel: const Text(
+                  'Login', //here
+                  style: kButtonTextStyle,
+                ),
                 w: w,
-                buttonLabel: 'Login',
               ),
               const SizedBox(
                 height: 12.0,
@@ -99,10 +102,14 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   );
                 },
-                buttonLabel: 'Proceed as Guest',
+                buttonLabel: Text(
+                  'Proceed as Guest',
+                  style: kButtonTextStyle.copyWith(
+                    color: themeColor,
+                  ),
+                ),
                 w: w,
                 buttonColor: greenAccent,
-                textColor: themeColor,
               ),
               const SizedBox(
                 height: 12.0,

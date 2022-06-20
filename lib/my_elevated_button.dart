@@ -6,26 +6,18 @@ class MyElevatedButton extends StatelessWidget {
       {required this.onPress,
       required this.buttonLabel,
       required this.w,
-      this.buttonColor = themeColor,
-      this.textColor = Colors.white});
+      this.buttonColor = themeColor});
 
   final double w;
   final Function() onPress;
-  final String buttonLabel;
-  final Color textColor, buttonColor;
+  final Widget buttonLabel;
+  final Color buttonColor;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPress,
-      child: Text(
-        buttonLabel, //here
-        style: TextStyle(
-          fontSize: 16.0,
-          color: textColor, // here
-          fontWeight: FontWeight.w900,
-        ),
-      ),
+      child: buttonLabel,
       style: ElevatedButton.styleFrom(
         primary: buttonColor, // here
         shape:

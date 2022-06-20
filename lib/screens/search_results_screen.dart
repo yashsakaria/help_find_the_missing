@@ -17,10 +17,10 @@ class _SearchResultsState extends State<SearchResults> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeColor,
-        title: Text('Search Results'),
+        title: const Text('Search Results'),
       ),
       body: Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: ListView.builder(
               itemCount: widget.documentAccuracyMap.length,
               itemBuilder: (context, index) {

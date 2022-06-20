@@ -123,7 +123,12 @@ class _MissingPersonInfoState extends State<MissingPersonInfo> {
                   Column(
                     children: [
                       MyElevatedButton(
-                          onPress: () {}, buttonLabel: 'View Comments', w: w),
+                          onPress: () {},
+                          buttonLabel: const Text(
+                            'View Comments',
+                            style: kButtonTextStyle,
+                          ),
+                          w: w),
                       const SizedBox(
                         height: 12,
                       ),
@@ -244,14 +249,18 @@ class _MissingPersonInfoState extends State<MissingPersonInfo> {
                                               }
                                             },
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                           Center(
                                             child: MyElevatedButton(
-                                                onPress: () {},
-                                                buttonLabel: 'Post',
-                                                w: w),
+                                              onPress: () {},
+                                              buttonLabel: const Text(
+                                                'Post',
+                                                style: kButtonTextStyle,
+                                              ),
+                                              w: w,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -262,7 +271,10 @@ class _MissingPersonInfoState extends State<MissingPersonInfo> {
                             },
                           );
                         },
-                        buttonLabel: 'Post Comment',
+                        buttonLabel: const Text(
+                          'Post Comment',
+                          style: kButtonTextStyle,
+                        ),
                         w: w,
                       ),
                     ],

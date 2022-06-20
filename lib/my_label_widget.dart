@@ -13,9 +13,11 @@ class myLabelWidget extends StatelessWidget {
         labelName,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
-          color: Color(0xFF374151),
+          color: Color(0xFF000610),
         ),
       ),
     );
   }
 }
+
+// 0xFF374151

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:help_find_the_missing/my_label_widget.dart';
 import 'package:help_find_the_missing/screens/missing_person_info.dart';
 import 'package:help_find_the_missing/build_image.dart';
 import 'package:help_find_the_missing/constants.dart';
@@ -20,76 +21,95 @@ class MissingPersonCard extends StatelessWidget {
         borderRadius: kDefaultBorderRadius,
         child: GestureDetector(
           child: Container(
-            // height: 130,
             decoration: const BoxDecoration(
-              // color: themeColor,
               borderRadius: kDefaultBorderRadius,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      BuildImage(
-                          imageURL: (doc['image'] != null)
-                              ? doc['image']
-                              : 'no_image.jpg'),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 12),
-                        child: SizedBox(
-                          height: 100,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    BuildImage(
+                        imageURL: (doc['image'] != null)
+                            ? doc['image']
+                            : 'no_image.jpg'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: SizedBox(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              doc.get('name'),
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  doc.get('gender'),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Text(
+                                  doc.get('age').toString(),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                (info.length == 2)
+                    ? Column(
+                        children: [
+                          const SizedBox(
+                            height: 6,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                doc.get('name'),
-                                style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              Row(
+                                children: [
+                                  const Text(
+                                    'Accuracy : ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF000610),
+                                    ),
+                                  ),
+                                  Text('${info.elementAt(0)}%'),
+                                ],
                               ),
                               Row(
                                 children: [
-                                  Text(
-                                    doc.get('gender'),
-                                    style: const TextStyle(
-                                      fontSize: 16,
+                                  const Text(
+                                    'Distance : ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF000610),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    doc.get('age').toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
+                                  Text('${info.elementAt(1)} km'),
                                 ],
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  (info.length == 2)
-                      ? SizedBox(
-                          height: 15,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                  'Accuracy : ${info.elementAt(0).toStringAsFixed(2)}%'),
-                              Text(
-                                  'Distance : ${info.elementAt(1).toStringAsFixed(2)} Km')
-                            ],
-                          ),
-                        )
-                      : Row()
-                ],
-              ),
+                        ],
+                      )
+                    : const SizedBox(),
+              ],
             ),
           ),
           onTap: () {
@@ -105,8 +125,3 @@ class MissingPersonCard extends StatelessWidget {
     );
   }
 }
-
-// Text(
-// 'Accuracy : ${info.elementAt(0).toStringAsFixed(2)}%'),
-// Text(
-// 'Distance : ${info.elementAt(1).toStringAsFixed(2)} Km')

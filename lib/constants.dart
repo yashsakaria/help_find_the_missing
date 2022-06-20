@@ -20,3 +20,9 @@ InputDecoration kTextFieldDecoration = InputDecoration(
 );
 
 const kDefaultBorderRadius = BorderRadius.all(Radius.circular(20.0));
+
+const kButtonTextStyle = TextStyle(
+  fontSize: 16.0,
+  // color: textColor, // here
+  fontWeight: FontWeight.w900,
+);

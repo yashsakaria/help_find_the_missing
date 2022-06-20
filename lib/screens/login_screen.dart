@@ -2,11 +2,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:help_find_the_missing/constants.dart';
-import 'package:help_find_the_missing/my_elevated_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:help_find_the_missing/screens/home_screen.dart';
+import 'package:help_find_the_missing/loading_widget.dart';
 import 'package:help_find_the_missing/my_label_widget.dart';
+import 'package:help_find_the_missing/my_alert_dialog.dart';
+import 'package:help_find_the_missing/my_elevated_button.dart';
+import 'package:help_find_the_missing/screens/home_screen.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({required this.initialIndex});
@@ -24,6 +28,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _fullNameController = TextEditingController();
   final _numberController = TextEditingController();
   final _codeController = TextEditingController();
+
+  bool isLoading = false;
 
   Future registerUser(
       String mobile, String fullName, double w, BuildContext context) async {
@@ -53,6 +59,9 @@ class _LoginScreenState extends State<LoginScreen> {
           print(authException.message);
         },
         codeSent: (String verificationId, int? forceResendingToken) {
+          setState(() {
+            isLoading = false;
+          });
           showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
@@ -101,11 +110,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                         _fullNameController.clear();
                         _numberController.clear();
-                      }).catchError((e) {
-                        print(e);
-                      });
+                      }).catchError(
+                        (e) {
+                          print(e);
+                          Navigator.of(ctx).pop();
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => MyAlertDialog(
+                              title: 'OTP Error',
+                              content: e.toString(),
+                            ),
+                          );
+                        },
+                      );
                     },
-                    buttonLabel: 'Submit',
+                    buttonLabel: const Text(
+                      'Submit',
+                      style: kButtonTextStyle,
+                    ),
                     w: w / 2,
                   ),
                 ),
@@ -197,6 +219,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             Center(
                               child: MyElevatedButton(
                                 onPress: () async {
+                                  if (isLoading) return;
+
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
                                   try {
                                     await _auth.signInWithEmailAndPassword(
                                         email: _emailController.text,
@@ -208,9 +236,28 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Navigator.pushNamed(context, HomeScreen.id);
                                   } catch (e) {
                                     print(e);
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          MyAlertDialog(
+                                        title: 'Login Error',
+                                        content: e.toString(),
+                                      ),
+                                    );
+                                  } finally {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
                                   }
                                 },
-                                buttonLabel: 'Authenticate',
+                                buttonLabel: (!isLoading)
+                                    ? const Text(
+                                        'Authenticate',
+                                        style: kButtonTextStyle,
+                                      )
+                                    : const LoadingWidget(
+                                        newText: 'Logging in',
+                                      ),
                                 w: w,
                               ),
                             ),
@@ -246,7 +293,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             Center(
                               child: MyElevatedButton(
-                                onPress: () {
+                                onPress: () async {
+                                  if (isLoading) return;
+
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
+                                  await Future.delayed(Duration(seconds: 5));
+
                                   try {
                                     if (_fullNameController.text.isEmpty) {
                                       throw "Name Field cannot be empty";
@@ -256,15 +311,36 @@ class _LoginScreenState extends State<LoginScreen> {
                                     }
                                     var mobile = '+91' + _numberController.text;
                                     String name = _fullNameController.text;
-                                    registerUser(mobile, name, w, context);
+                                    await registerUser(
+                                        mobile, name, w, context);
                                   } catch (e) {
                                     print(e);
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          MyAlertDialog(
+                                        title: 'Login Error',
+                                        content: e.toString(),
+                                      ),
+                                    );
+                                  } finally {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
                                   }
                                 },
-                                buttonLabel: 'Send OTP',
+                                buttonLabel: (!isLoading)
+                                    ? Text(
+                                        'Send OTP',
+                                        style: kButtonTextStyle.copyWith(
+                                            color: themeColor),
+                                      )
+                                    : const LoadingWidget(
+                                        newText: 'Sending OTP',
+                                        progressColor: themeColor,
+                                      ),
                                 w: w,
                                 buttonColor: greenAccent,
-                                textColor: themeColor,
                               ),
                             ),
                           ],
