@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:help_find_the_missing/constants.dart';
+
+import 'package:help_find_the_missing/constants/constants.dart';
+import 'package:help_find_the_missing/my_widgets/missing_person_card.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:help_find_the_missing/missing_person_card.dart';
 
 class SearchResults extends StatefulWidget {
   final Map<QueryDocumentSnapshot, List> documentAccuracyMap;
-  SearchResults({required this.documentAccuracyMap});
+  const SearchResults({required this.documentAccuracyMap});
 
   @override
   State<SearchResults> createState() => _SearchResultsState();

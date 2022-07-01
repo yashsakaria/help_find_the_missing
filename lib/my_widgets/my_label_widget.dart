@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class myLabelWidget extends StatelessWidget {
-  const myLabelWidget({required this.labelName});
+class MyLabelWidget extends StatelessWidget {
+  const MyLabelWidget({required this.labelName});
 
   final String labelName;
 
@@ -13,11 +13,9 @@ class myLabelWidget extends StatelessWidget {
         labelName,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
-          color: Color(0xFF000610),
+          color: Color(0xFF374151),
         ),
       ),
     );
   }
 }
-
-// 0xFF374151

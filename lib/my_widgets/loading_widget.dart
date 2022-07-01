@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:help_find_the_missing/constants.dart';
+import 'package:help_find_the_missing/constants/constants.dart';
 
 class LoadingWidget extends StatelessWidget {
   final String newText;

@@ -6,10 +6,10 @@ import 'package:flutter/services.dart';
 
 import 'package:image_picker/image_picker.dart';
 
-import 'package:help_find_the_missing/constants.dart';
-import 'package:help_find_the_missing/my_alert_dialog.dart';
-import 'package:help_find_the_missing/my_label_widget.dart';
-import 'package:help_find_the_missing/my_elevated_button.dart';
+import 'package:help_find_the_missing/constants/constants.dart';
+import 'package:help_find_the_missing/my_widgets/my_alert_dialog.dart';
+import 'package:help_find_the_missing/my_widgets/my_label_widget.dart';
+import 'package:help_find_the_missing/my_widgets/my_elevated_button.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -310,7 +310,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               );
             },
           ),
-          const myLabelWidget(labelName: 'Full Name'),
+          const MyLabelWidget(labelName: 'Full Name'),
           TextField(
             keyboardType: TextInputType.name,
             controller: _fullNameController,
@@ -318,7 +318,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'Full Name',
             ),
           ),
-          const myLabelWidget(labelName: 'Age'),
+          const MyLabelWidget(labelName: 'Age'),
           TextField(
             maxLength: 3,
             controller: _ageController,
@@ -329,7 +329,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'Age',
             ),
           ),
-          const myLabelWidget(labelName: 'Gender'),
+          const MyLabelWidget(labelName: 'Gender'),
           Material(
             elevation: 2,
             borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -360,7 +360,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               }).toList(),
             ),
           ),
-          const myLabelWidget(labelName: 'Parent Name'),
+          const MyLabelWidget(labelName: 'Parent Name'),
           TextField(
             keyboardType: TextInputType.name,
             controller: _parentNameController,
@@ -368,7 +368,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'Parent Name',
             ),
           ),
-          const myLabelWidget(labelName: 'Parent Contact Number'),
+          const MyLabelWidget(labelName: 'Parent Contact Number'),
           TextField(
             maxLength: 10,
             keyboardType: TextInputType.phone,
@@ -382,7 +382,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
           ),
           Row(
             children: [
-              const myLabelWidget(labelName: 'Height : '),
+              const MyLabelWidget(labelName: 'Height : '),
               const SizedBox(
                 width: 10,
               ),
@@ -399,7 +399,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
             ),
             child: RangeSlider(
               activeColor: themeColor,
-              inactiveColor: greenAccent,
+              inactiveColor: secondaryColor,
               values: selectedHeightRange,
               onChanged: (RangeValues newRange) {
                 setState(() {
@@ -413,7 +413,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
           ),
           Row(
             children: [
-              const myLabelWidget(labelName: 'Weight : '),
+              const MyLabelWidget(labelName: 'Weight : '),
               const SizedBox(
                 width: 10,
               ),
@@ -428,7 +428,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
             ),
             child: Slider(
               activeColor: themeColor,
-              inactiveColor: greenAccent,
+              inactiveColor: secondaryColor,
               value: selectedWeight,
               onChanged: (double newWeight) {
                 setState(() {
@@ -439,7 +439,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               max: 180,
             ),
           ),
-          const myLabelWidget(labelName: 'Address'),
+          const MyLabelWidget(labelName: 'Address'),
           TextField(
             maxLines: 4,
             keyboardType: TextInputType.name,
@@ -448,7 +448,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'Address',
             ),
           ),
-          const myLabelWidget(labelName: 'Pincode'),
+          const MyLabelWidget(labelName: 'Pincode'),
           TextField(
             maxLength: 6,
             keyboardType: TextInputType.phone,
@@ -487,7 +487,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               }
             },
           ),
-          const myLabelWidget(labelName: 'Area'),
+          const MyLabelWidget(labelName: 'Area'),
           Material(
             elevation: 2,
             borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -517,7 +517,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               }).toList(),
             ),
           ),
-          const myLabelWidget(labelName: 'City/Town'),
+          const MyLabelWidget(labelName: 'City/Town'),
           TextField(
             keyboardType: TextInputType.name,
             controller: _cityController,
@@ -525,7 +525,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'Place',
             ),
           ),
-          const myLabelWidget(labelName: 'District'),
+          const MyLabelWidget(labelName: 'District'),
           TextField(
             readOnly: true,
             keyboardType: TextInputType.name,
@@ -534,7 +534,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'District',
             ),
           ),
-          const myLabelWidget(labelName: 'State'),
+          const MyLabelWidget(labelName: 'State'),
           TextField(
             readOnly: true,
             keyboardType: TextInputType.name,
@@ -543,7 +543,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'State',
             ),
           ),
-          const myLabelWidget(labelName: 'Complexion'),
+          const MyLabelWidget(labelName: 'Complexion'),
           TextField(
             keyboardType: TextInputType.name,
             controller: _complexionController,
@@ -551,7 +551,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'Complexion',
             ),
           ),
-          const myLabelWidget(labelName: 'Body Type'),
+          const MyLabelWidget(labelName: 'Body Type'),
           TextField(
             keyboardType: TextInputType.name,
             controller: _bodyTypeController,
@@ -559,7 +559,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'Body Type',
             ),
           ),
-          const myLabelWidget(labelName: 'Hair Color'),
+          const MyLabelWidget(labelName: 'Hair Color'),
           TextField(
             keyboardType: TextInputType.name,
             controller: _hairColorController,
@@ -567,7 +567,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'Hair Color',
             ),
           ),
-          const myLabelWidget(labelName: 'Identification Mark'),
+          const MyLabelWidget(labelName: 'Identification Mark'),
           TextField(
             keyboardType: TextInputType.name,
             controller: _markController,
@@ -575,7 +575,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'Any Identification Mark, like a mole',
             ),
           ),
-          const myLabelWidget(labelName: 'Last Outfit'),
+          const MyLabelWidget(labelName: 'Last Outfit'),
           TextField(
             keyboardType: TextInputType.name,
             controller: _lastOutfitController,
@@ -583,7 +583,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'Last outfit, ex : Blue shirt , Black top',
             ),
           ),
-          const myLabelWidget(labelName: 'Place of missing'),
+          const MyLabelWidget(labelName: 'Place of missing'),
           TextField(
             keyboardType: TextInputType.name,
             controller: _pomController,
@@ -591,7 +591,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               hintText: 'Place of missing',
             ),
           ),
-          const myLabelWidget(labelName: 'Date of missing'),
+          const MyLabelWidget(labelName: 'Date of missing'),
           TextField(
             readOnly: true,
             keyboardType: TextInputType.datetime,
@@ -610,7 +610,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
                     data: Theme.of(context).copyWith(
                       colorScheme: ColorScheme.light(
                         primary: themeColor, // <-- SEE HERE
-                        onPrimary: greenAccent, // <-- SEE HERE
+                        onPrimary: secondaryColor, // <-- SEE HERE
                       ),
                     ),
                     child: child!,
@@ -626,7 +626,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
               }
             },
           ),
-          const myLabelWidget(labelName: 'Last Seen'),
+          const MyLabelWidget(labelName: 'Last Seen'),
           TextField(
             keyboardType: TextInputType.name,
             controller: _lastSeenController,
@@ -649,7 +649,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
                   style: kButtonTextStyle.copyWith(color: themeColor),
                 ),
                 w: w / 2,
-                buttonColor: greenAccent,
+                buttonColor: secondaryColor,
               ),
               MyElevatedButton(
                   onPress: () async {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import 'package:help_find_the_missing/constants/constants.dart';
 
 class MyElevatedButton extends StatelessWidget {
   const MyElevatedButton(
@@ -22,7 +22,7 @@ class MyElevatedButton extends StatelessWidget {
         primary: buttonColor, // here
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-        minimumSize: Size((w / 4) * 3, 48),
+        fixedSize: Size((w / 4) * 3, 48),
       ),
     );
   }

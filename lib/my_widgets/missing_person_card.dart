@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:help_find_the_missing/my_label_widget.dart';
-import 'package:help_find_the_missing/screens/missing_person_info.dart';
-import 'package:help_find_the_missing/build_image.dart';
-import 'package:help_find_the_missing/constants.dart';
+
+import 'package:help_find_the_missing/constants/constants.dart';
+import 'package:help_find_the_missing/my_widgets/build_image.dart';
+import 'package:help_find_the_missing/screens/missing_person_info_screen.dart';
 
 const List def = [];
 
@@ -33,17 +34,21 @@ class MissingPersonCard extends StatelessWidget {
                         imageURL: (doc['image'] != null)
                             ? doc['image']
                             : 'no_image.jpg'),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: SizedBox(
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               doc.get('name'),
+                              maxLines: 1,
                               style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                             Row(
                               children: [

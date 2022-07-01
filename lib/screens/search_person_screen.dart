@@ -1,32 +1,26 @@
-import 'dart:convert';
+// ignore_for_file: avoid_print
+
 import 'dart:io';
+import 'dart:convert';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:help_find_the_missing/loading_widget.dart';
-import 'package:help_find_the_missing/my_elevated_button.dart';
+
+import 'package:help_find_the_missing/constants/constants.dart';
+import 'package:help_find_the_missing/my_widgets/loading_widget.dart';
+import 'package:help_find_the_missing/my_widgets/my_alert_dialog.dart';
+import 'package:help_find_the_missing/my_widgets/my_elevated_button.dart';
 import 'package:help_find_the_missing/screens/search_results_screen.dart';
-import 'package:image_picker/image_picker.dart';
-import '../constants.dart';
+
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_face_api/face_api.dart' as Regula;
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:haversine_distance/haversine_distance.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
-double? latitude, longitude;
-Location? endCoordinate;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 final _firestore = FirebaseFirestore.instance;
-
-Future<void> getLocation() async {
-  LocationPermission permission = await Geolocator.requestPermission();
-  Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high);
-  latitude = position.latitude;
-  longitude = position.longitude;
-  endCoordinate = Location(latitude!, longitude!);
-}
-
-Map<QueryDocumentSnapshot, List> documentAccuracyMap = {};
 
 class SearchPerson extends StatefulWidget {
   const SearchPerson({Key? key}) : super(key: key);
@@ -41,10 +35,15 @@ class _SearchPersonState extends State<SearchPerson> {
   var img1 = Image.asset('images/no_image.jpg');
   bool isLoading = false;
 
-  void initState() {
-    getLocation();
-    print(latitude.toString() + ' ' + longitude.toString());
-  }
+  double? latitude, longitude;
+  Location? endCoordinate;
+
+  Map<QueryDocumentSnapshot, List> documentAccuracyMap = {};
+
+  // void initState() {
+  //   getLocation();
+  //   print(latitude.toString() + ' ' + longitude.toString());
+  // }
 
   Map<QueryDocumentSnapshot, List> sortMap(
       Map<QueryDocumentSnapshot, List> mp) {
@@ -116,6 +115,14 @@ class _SearchPersonState extends State<SearchPerson> {
     }
     documentAccuracyMap = sortMap(documentAccuracyMap);
     print(result);
+  }
+
+  Future<void> getLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    latitude = position.latitude;
+    longitude = position.longitude;
+    endCoordinate = Location(latitude!, longitude!);
   }
 
   @override
@@ -200,33 +207,57 @@ class _SearchPersonState extends State<SearchPerson> {
             ),
             MyElevatedButton(
               onPress: () async {
-                if (isLoading) return;
+                try {
+                  if (isLoading) return;
 
-                setState(() {
-                  isLoading = true;
-                });
+                  setState(() {
+                    isLoading = true;
+                  });
 
-                print('before call');
-                await matchFaces();
+                  LocationPermission permission =
+                      await Geolocator.checkPermission();
+                  if (permission == LocationPermission.denied) {
+                    permission = await Geolocator.requestPermission();
+                    if (permission == LocationPermission.denied) {
+                      throw 'Cannot proceed without GeoLocation';
+                    }
+                  }
 
-                setState(() {
-                  isLoading = false;
-                });
+                  if (permission == LocationPermission.deniedForever) {
+                    throw 'Enable Location Services from settings.';
+                  }
 
-                print('after match faces');
+                  await getLocation();
 
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SearchResults(
-                      documentAccuracyMap: documentAccuracyMap,
+                  print('before call');
+                  await matchFaces();
+
+                  print('after match faces');
+
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SearchResults(
+                        documentAccuracyMap: documentAccuracyMap,
+                      ),
                     ),
-                  ),
-                );
+                  );
 
-                print('after push');
+                  print('after push');
 
-                Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                } catch (e) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return MyAlertDialog(
+                            title: 'Location', content: e.toString());
+                      });
+                } finally {
+                  setState(() {
+                    isLoading = false;
+                  });
+                }
               },
               buttonLabel: (!isLoading)
                   ? const Text(

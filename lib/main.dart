@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:help_find_the_missing/screens/add_report_screen.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+
+import 'package:help_find_the_missing/firebase_options.dart';
 import 'package:help_find_the_missing/screens/home_screen.dart';
 import 'package:help_find_the_missing/screens/welcome_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:help_find_the_missing/screens/add_report_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
       initialRoute: WelcomeScreen.id,
       routes: {
         WelcomeScreen.id: (context) => WelcomeScreen(),
-        HomeScreen.id: (context) => HomeScreen(),
+        HomeScreen.id: (context) => const HomeScreen(),
         AddReportScreen.id: (context) => AddReportScreen(),
       },
     );

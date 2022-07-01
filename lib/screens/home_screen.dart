@@ -1,26 +1,23 @@
 // ignore_for_file: avoid_print
 
-import 'dart:io';
 import 'package:flutter/material.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:help_find_the_missing/constants.dart';
-import 'package:help_find_the_missing/screens/search_person_screen.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
+
+import 'package:help_find_the_missing/constants/constants.dart';
 import 'package:help_find_the_missing/screens/add_report_screen.dart';
-import 'package:help_find_the_missing/missing_person_card.dart';
+import 'package:help_find_the_missing/screens/search_person_screen.dart';
+import 'package:help_find_the_missing/my_widgets/missing_person_card.dart';
 
 final _auth = FirebaseAuth.instance;
 final _firestore = FirebaseFirestore.instance;
-final _image = FirebaseStorage.instance.ref();
 late User loggedInUser;
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'homeScreen';
 
-  HomeScreen({this.name = 'NA'});
+  const HomeScreen({this.name = 'NA'});
 
   final String name;
 
@@ -68,8 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SearchPerson()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SearchPerson()));
               },
               icon: const Icon(Icons.search),
             ),
@@ -83,8 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 10)
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
+        body: const Padding(
+          padding: EdgeInsets.all(8.0),
           child: MissingPersonStream(),
         ),
         floatingActionButton: Visibility(
@@ -104,48 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class MissingPersonStream extends StatelessWidget {
-  MissingPersonStream({Key? key}) : super(key: key);
-
-  late String localDirPath;
-
-  Future<void> _getLocalPath() async {
-    final appDocDir = await getApplicationDocumentsDirectory();
-    localDirPath = appDocDir.path;
-  }
-
-  Future<String?> saveImageToLocal(String id) async {
-    print('here');
-
-    try {
-      final imagePath = '$id/jpg';
-      final localImagePath = path.join(localDirPath, imagePath);
-
-      bool exists = await File(localImagePath).exists();
-
-      if (exists) {
-        return localImagePath;
-      }
-
-      final localImageFile = File(localImagePath);
-      final imageRef = _image.child(imagePath);
-
-      imageRef.writeToFile(localImageFile);
-      return localImagePath;
-    } catch (e) {
-      print(e);
-      return null;
-    }
-  }
-
-  Stream<QuerySnapshot<Object?>>? imageStream() async* {
-    await _getLocalPath();
-    QuerySnapshot snapshot =
-        await _firestore.collection('missing_person').get();
-    for (QueryDocumentSnapshot doc in snapshot.docs) {
-      await saveImageToLocal(doc.id);
-    }
-    yield* _firestore.collection('missing-person').orderBy('time').snapshots();
-  }
+  const MissingPersonStream({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

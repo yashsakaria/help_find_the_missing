@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:help_find_the_missing/constants.dart';
-import 'package:help_find_the_missing/loading_widget.dart';
-import 'package:help_find_the_missing/my_label_widget.dart';
-import 'package:help_find_the_missing/my_alert_dialog.dart';
-import 'package:help_find_the_missing/my_elevated_button.dart';
+import 'package:help_find_the_missing/constants/constants.dart';
 import 'package:help_find_the_missing/screens/home_screen.dart';
+import 'package:help_find_the_missing/my_widgets/loading_widget.dart';
+import 'package:help_find_the_missing/my_widgets/my_label_widget.dart';
+import 'package:help_find_the_missing/my_widgets/my_alert_dialog.dart';
+import 'package:help_find_the_missing/my_widgets/my_elevated_button.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -195,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           // mainAxisSize: MainAxisSize.min,
                           children: [
-                            const myLabelWidget(labelName: 'Email Address'),
+                            const MyLabelWidget(labelName: 'Email Address'),
                             TextField(
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
@@ -203,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 hintText: 'Enter your Email Address',
                               ),
                             ),
-                            const myLabelWidget(labelName: 'Password'),
+                            const MyLabelWidget(labelName: 'Password'),
                             TextField(
                               controller: _passwordController,
                               autocorrect: false,
@@ -270,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const myLabelWidget(labelName: 'Full Name'),
+                            const MyLabelWidget(labelName: 'Full Name'),
                             TextField(
                               keyboardType: TextInputType.name,
                               controller: _fullNameController,
@@ -278,7 +278,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 hintText: 'Full Name',
                               ),
                             ),
-                            const myLabelWidget(labelName: 'Contact Number'),
+                            const MyLabelWidget(labelName: 'Contact Number'),
                             TextField(
                               maxLength: 10,
                               keyboardType: TextInputType.phone,
@@ -299,8 +299,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   setState(() {
                                     isLoading = true;
                                   });
-
-                                  await Future.delayed(Duration(seconds: 5));
 
                                   try {
                                     if (_fullNameController.text.isEmpty) {
@@ -340,7 +338,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         progressColor: themeColor,
                                       ),
                                 w: w,
-                                buttonColor: greenAccent,
+                                buttonColor: secondaryColor,
                               ),
                             ),
                           ],

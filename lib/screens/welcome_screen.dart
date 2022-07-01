@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:help_find_the_missing/constants.dart';
-import 'package:help_find_the_missing/my_elevated_button.dart';
-import 'login_screen.dart';
+import 'package:help_find_the_missing/constants/constants.dart';
+import 'package:help_find_the_missing/screens/login_screen.dart';
+import 'package:help_find_the_missing/my_widgets/my_elevated_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
   static const String id = 'welcomeScreen';
@@ -109,7 +109,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 w: w,
-                buttonColor: greenAccent,
+                buttonColor: secondaryColor,
               ),
               const SizedBox(
                 height: 12.0,

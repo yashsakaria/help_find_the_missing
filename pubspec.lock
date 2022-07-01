@@ -251,13 +251,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.6"
-  flutter_spinkit:
-    dependency: "direct dev"
-    description:
-      name: flutter_spinkit
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -416,14 +409,14 @@ packages:
     source: hosted
     version: "1.0.2"
   path:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.1"
   path_provider:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: path_provider
       url: "https://pub.dartlang.org"

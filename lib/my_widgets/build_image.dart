@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'constants.dart';
+import 'package:help_find_the_missing/constants/constants.dart';
 
 class BuildImage extends StatelessWidget {
   final String imageURL;
@@ -27,7 +27,7 @@ class BuildImage extends StatelessWidget {
           return Container(
             color: Colors.black12,
             child: const Icon(
-              Icons.error,
+              Icons.error_outline_rounded,
               color: Colors.red,
             ),
           );
