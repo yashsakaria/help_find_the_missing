@@ -38,6 +38,7 @@ dependencies:
   flutter_face_api: ^3.2.3
   flutter_cache_manager: ^3.3.0
   haversine_distance: ^1.2.1
+  flutter_phone_direct_caller: ^2.1.1
 
 dev_dependencies:
   flutter_test:

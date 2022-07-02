@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 import 'package:help_find_the_missing/constants/constants.dart';
 import 'package:help_find_the_missing/my_widgets/build_image.dart';
 import 'package:help_find_the_missing/my_widgets/my_label_widget.dart';
 import 'package:help_find_the_missing/my_widgets/my_elevated_button.dart';
 import 'package:help_find_the_missing/my_widgets/combo_label_widget.dart';
+
+final _firestore = FirebaseFirestore.instance;
 
 class MissingPersonInfo extends StatefulWidget {
   final QueryDocumentSnapshot<Object?> doc;
@@ -24,6 +27,7 @@ class _MissingPersonInfoState extends State<MissingPersonInfo> {
 
   final _dateController = TextEditingController();
   final _timeController = TextEditingController();
+  final _commentController = TextEditingController();
 
   @override
   void initState() {
@@ -80,9 +84,33 @@ class _MissingPersonInfoState extends State<MissingPersonInfo> {
                         title: 'Guardian Name :',
                         content: widget.doc.get('parent_name'),
                       ),
-                      ComboLabelWidget(
-                        title: 'Guardian Contact : ',
-                        content: widget.doc.get('parent_contact'),
+                      GestureDetector(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: const [
+                                  MyLabelWidget(
+                                      labelName: 'Guardian Contact : '),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: MyLabelWidget(
+                                labelName: widget.doc.get('parent_contact'),
+                                labelStyle: kLabelWidgetTextStyle.copyWith(
+                                  color: Colors.blueAccent,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        onTap: () async {
+                          await FlutterPhoneDirectCaller.callNumber(
+                              widget.doc.get('parent_contact'));
+                        },
                       ),
                       ComboLabelWidget(
                           title: 'Height :',
@@ -163,7 +191,7 @@ class _MissingPersonInfoState extends State<MissingPersonInfo> {
                                               labelName: 'Last Seen Location'),
                                           TextField(
                                             keyboardType: TextInputType.name,
-                                            // controller: _lastSeenController,
+                                            controller: _commentController,
                                             decoration:
                                                 kTextFieldDecoration.copyWith(
                                               hintText: 'Location',
@@ -257,7 +285,67 @@ class _MissingPersonInfoState extends State<MissingPersonInfo> {
                                           ),
                                           Center(
                                             child: MyElevatedButton(
-                                              onPress: () {},
+                                              onPress: () {
+                                                var commentRef = _firestore
+                                                    .collection('comments')
+                                                    .doc(widget.doc.id);
+
+                                                commentRef
+                                                    .get()
+                                                    .then((document) {
+                                                  if (document.exists) {
+                                                    print(document
+                                                        .get('comments')[0]);
+
+                                                    if (document
+                                                            .get('comments')
+                                                            .length ==
+                                                        4) {
+                                                      commentRef.update({
+                                                        "comments": FieldValue
+                                                            .arrayRemove([
+                                                          document.get(
+                                                              'comments')[0]
+                                                        ])
+                                                      });
+                                                    }
+
+                                                    commentRef.update({
+                                                      "comments": FieldValue
+                                                          .arrayUnion([
+                                                        {
+                                                          "comment":
+                                                              _commentController
+                                                                  .text,
+                                                          "date":
+                                                              _dateController
+                                                                  .text,
+                                                          "time":
+                                                              _timeController
+                                                                  .text,
+                                                        }
+                                                      ])
+                                                    });
+                                                  } else {
+                                                    commentRef.set({
+                                                      "comments": FieldValue
+                                                          .arrayUnion([
+                                                        {
+                                                          "comment":
+                                                              _commentController
+                                                                  .text,
+                                                          "date":
+                                                              _dateController
+                                                                  .text,
+                                                          "time":
+                                                              _timeController
+                                                                  .text,
+                                                        }
+                                                      ])
+                                                    });
+                                                  }
+                                                });
+                                              },
                                               buttonLabel: const Text(
                                                 'Post',
                                                 style: kButtonTextStyle,
@@ -282,69 +370,6 @@ class _MissingPersonInfoState extends State<MissingPersonInfo> {
                       ),
                     ],
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: <Widget>[
-                  //     Expanded(
-                  //       child: Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.end,
-                  //         children: const <Widget>[
-                  //           MyLabelWidget(labelName: 'Name  :'),
-                  //           MyLabelWidget(labelName: 'Age  :'),
-                  //           MyLabelWidget(labelName: 'Gender  :'),
-                  //           MyLabelWidget(labelName: 'Guardian Name  :'),
-                  //           MyLabelWidget(labelName: 'Guardian Contact  :'),
-                  //           MyLabelWidget(labelName: 'Height  :'),
-                  //           MyLabelWidget(labelName: 'Weight  :'),
-                  //           MyLabelWidget(labelName: 'Pincode  :'),
-                  //           MyLabelWidget(labelName: 'City  :'),
-                  //           MyLabelWidget(labelName: 'District  :'),
-                  //           MyLabelWidget(labelName: 'State  :'),
-                  //           MyLabelWidget(labelName: 'Place of Missing  :'),
-                  //           MyLabelWidget(labelName: 'Date of Missing  :'),
-                  //           MyLabelWidget(labelName: 'Last seen wearing  :'),
-                  //           MyLabelWidget(labelName: 'Posted By :'),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           MyLabelWidget(labelName: widget.doc.get('name')),
-                  //           MyLabelWidget(
-                  //               labelName: widget.doc.get('age').toString()),
-                  //           MyLabelWidget(labelName: widget.doc.get('gender')),
-                  //           MyLabelWidget(
-                  //               labelName: widget.doc.get('parent_name')),
-                  //           MyLabelWidget(
-                  //               labelName: widget.doc.get('parent_contact')),
-                  //           MyLabelWidget(
-                  //               labelName:
-                  //                   widget.doc.get('height')[0].toString() +
-                  //                       'cm - ' +
-                  //                       widget.doc.get('height')[1].toString() +
-                  //                       'cm'),
-                  //           MyLabelWidget(
-                  //               labelName:
-                  //                   widget.doc.get('weight').toString() + 'kg'),
-                  //           MyLabelWidget(
-                  //               labelName:
-                  //                   widget.doc.get('pincode').toString()),
-                  //           MyLabelWidget(labelName: widget.doc.get('city')),
-                  //           MyLabelWidget(
-                  //               labelName: widget.doc.get('district')),
-                  //           MyLabelWidget(labelName: widget.doc.get('state')),
-                  //           MyLabelWidget(labelName: widget.doc.get('pom')),
-                  //           MyLabelWidget(labelName: widget.doc.get('dom')),
-                  //           MyLabelWidget(
-                  //               labelName: widget.doc.get('last_outfit')),
-                  //           MyLabelWidget(labelName: postedBy),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
             ),

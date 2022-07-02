@@ -26,3 +26,8 @@ const kButtonTextStyle = TextStyle(
   // color: textColor, // here
   fontWeight: FontWeight.w900,
 );
+
+const kLabelWidgetTextStyle = TextStyle(
+  fontWeight: FontWeight.bold,
+  color: Color(0xFF374151),
+);
