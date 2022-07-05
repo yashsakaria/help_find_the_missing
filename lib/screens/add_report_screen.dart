@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 import 'package:help_find_the_missing/constants/constants.dart';
 import 'package:help_find_the_missing/my_widgets/my_alert_dialog.dart';
@@ -332,32 +333,39 @@ class _AddReportScreenState extends State<AddReportScreen> {
           const MyLabelWidget(labelName: 'Gender'),
           Material(
             elevation: 2,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            child: DropdownButton<String>(
-              value: gender,
-              isExpanded: true,
-              underline: Container(
-                color: Colors.white,
+            borderRadius: kDefaultBorderRadius,
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton2<String>(
+                value: gender,
+                isExpanded: true,
+                underline: Container(
+                  color: Colors.white,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    gender = newValue!;
+                  });
+                },
+                // buttonWidth: w * 3 / 4,
+                dropdownMaxHeight: 300,
+                dropdownDecoration: const BoxDecoration(
+                  borderRadius: kDefaultBorderRadius,
+                ),
+                items: <String>['Male', 'Female', 'Other']
+                    .map<DropdownMenuItem<String>>((itemValue) {
+                  return DropdownMenuItem(
+                    value: itemValue,
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(itemValue)
+                      ],
+                    ),
+                  );
+                }).toList(),
               ),
-              onChanged: (String? newValue) {
-                setState(() {
-                  gender = newValue!;
-                });
-              },
-              items: <String>['Male', 'Female', 'Other']
-                  .map<DropdownMenuItem<String>>((itemValue) {
-                return DropdownMenuItem(
-                  value: itemValue,
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(itemValue)
-                    ],
-                  ),
-                );
-              }).toList(),
             ),
           ),
           const MyLabelWidget(labelName: 'Parent Name'),
@@ -490,31 +498,37 @@ class _AddReportScreenState extends State<AddReportScreen> {
           const MyLabelWidget(labelName: 'Area'),
           Material(
             elevation: 2,
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            child: DropdownButton<String>(
-              value: selectedArea,
-              isExpanded: true,
-              underline: Container(
-                color: Colors.white,
+            borderRadius: kDefaultBorderRadius,
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton2<String>(
+                value: selectedArea,
+                isExpanded: true,
+                underline: Container(
+                  color: Colors.white,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedArea = newValue!;
+                  });
+                },
+                dropdownMaxHeight: 300,
+                dropdownDecoration: const BoxDecoration(
+                  borderRadius: kDefaultBorderRadius,
+                ),
+                items: areas.map<DropdownMenuItem<String>>((itemValue) {
+                  return DropdownMenuItem(
+                    value: itemValue,
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(itemValue)
+                      ],
+                    ),
+                  );
+                }).toList(),
               ),
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedArea = newValue!;
-                });
-              },
-              items: areas.map<DropdownMenuItem<String>>((itemValue) {
-                return DropdownMenuItem(
-                  value: itemValue,
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(itemValue)
-                    ],
-                  ),
-                );
-              }).toList(),
             ),
           ),
           const MyLabelWidget(labelName: 'City/Town'),

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:help_find_the_missing/constants/constants.dart';
 import 'package:help_find_the_missing/my_widgets/build_image.dart';
+import 'package:help_find_the_missing/my_widgets/my_label_widget.dart';
 import 'package:help_find_the_missing/screens/missing_person_info_screen.dart';
 
 const List def = [];
@@ -69,6 +70,59 @@ class MissingPersonCard extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'State',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: themeColor,
+                                        ),
+                                      ),
+                                      Text(
+                                        doc.get('state'),
+                                        maxLines: 1,
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            overflow: TextOverflow.ellipsis),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Date of Missing',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: themeColor,
+                                        ),
+                                      ),
+                                      Text(
+                                        doc.get('dom'),
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       ),

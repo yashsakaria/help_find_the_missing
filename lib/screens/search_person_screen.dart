@@ -14,6 +14,7 @@ import 'package:help_find_the_missing/screens/search_results_screen.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_face_api/face_api.dart' as Regula;
 import 'package:haversine_distance/haversine_distance.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -33,17 +34,15 @@ class _SearchPersonState extends State<SearchPerson> {
   var image1 = Regula.MatchFacesImage();
   var image2 = Regula.MatchFacesImage();
   var img1 = Image.asset('images/no_image.jpg');
+
+  String selectedState = 'All of India';
   bool isLoading = false;
+  bool isImageSelected = false;
 
   double? latitude, longitude;
   Location? endCoordinate;
 
   Map<QueryDocumentSnapshot, List> documentAccuracyMap = {};
-
-  // void initState() {
-  //   getLocation();
-  //   print(latitude.toString() + ' ' + longitude.toString());
-  // }
 
   Map<QueryDocumentSnapshot, List> sortMap(
       Map<QueryDocumentSnapshot, List> mp) {
@@ -60,61 +59,76 @@ class _SearchPersonState extends State<SearchPerson> {
   }
 
   setImage(Uint8List imageFile, int type) {
-    if (imageFile == null) return;
+    // if (imageFile == null) return;
     image1.bitmap = base64Encode(imageFile);
     image1.imageType = type;
     setState(() {
       img1 = Image.memory(imageFile);
+      isImageSelected = true;
     });
   }
 
   matchFaces() async {
     documentAccuracyMap.clear();
     final haversineDistance = HaversineDistance();
-    var result = [];
-
-    print('before snapshot');
-    var snapshot = await _firestore.collection('missing_person').get();
-    print('after');
     final cache = DefaultCacheManager();
-    for (QueryDocumentSnapshot doc in snapshot.docs) {
-      var file = await cache.getSingleFile(doc.get('image'));
-      print(file.path.toString());
-      Uint8List img2 = File(file.path).readAsBytesSync();
-      image2.bitmap = base64Encode(img2);
-      image2.imageType = Regula.ImageType.PRINTED;
+    var result = [];
+    QuerySnapshot<Map<String, dynamic>> snapshot;
 
-      var request = Regula.MatchFacesRequest();
-      request.images = [image1, image2];
-      await Regula.FaceSDK.matchFaces(jsonEncode(request)).then((value) async {
-        var response = Regula.MatchFacesResponse.fromJson(json.decode(value));
-        await Regula.FaceSDK.matchFacesSimilarityThresholdSplit(
-                jsonEncode(response!.results), 0.75)
-            .then((str) {
-          var split = Regula.MatchFacesSimilarityThresholdSplit.fromJson(
-              json.decode(str));
-          var acc;
-          try {
-            print(split!.matchedFaces.length);
-            acc = (split.matchedFaces.elementAt(0)!.similarity! * 100)
-                .toStringAsFixed(2);
-            result.add(doc.get('name'));
-            result.add(acc);
-            final startCoordinate = Location(doc.get('lat'), doc.get('long'));
-            final distance = haversineDistance
-                .haversine(startCoordinate, endCoordinate!, Unit.KM)
-                .floor();
-            documentAccuracyMap[doc] = [acc, distance];
-          } catch (e) {
-            acc = 0;
-            print('error');
-          }
-          print(acc);
-        });
-      });
+    if (selectedState != states[0]) {
+      snapshot = await _firestore
+          .collection('missing_person')
+          .where("state", isEqualTo: selectedState)
+          .get();
+    } else {
+      snapshot = await _firestore.collection('missing_person').get();
     }
-    documentAccuracyMap = sortMap(documentAccuracyMap);
-    print(result);
+
+    if (isImageSelected) {
+      for (QueryDocumentSnapshot doc in snapshot.docs) {
+        var file = await cache.getSingleFile(doc.get('image'));
+        print(file.path.toString());
+        Uint8List img2 = File(file.path).readAsBytesSync();
+        image2.bitmap = base64Encode(img2);
+        image2.imageType = Regula.ImageType.PRINTED;
+
+        var request = Regula.MatchFacesRequest();
+        request.images = [image1, image2];
+        await Regula.FaceSDK.matchFaces(jsonEncode(request))
+            .then((value) async {
+          var response = Regula.MatchFacesResponse.fromJson(json.decode(value));
+          await Regula.FaceSDK.matchFacesSimilarityThresholdSplit(
+                  jsonEncode(response!.results), 0.75)
+              .then((str) {
+            var split = Regula.MatchFacesSimilarityThresholdSplit.fromJson(
+                json.decode(str));
+            Object acc;
+            try {
+              print(split!.matchedFaces.length);
+              acc = (split.matchedFaces.elementAt(0)!.similarity! * 100)
+                  .toStringAsFixed(2);
+              result.add(doc.get('name'));
+              result.add(acc);
+              final startCoordinate = Location(doc.get('lat'), doc.get('long'));
+              final distance = haversineDistance
+                  .haversine(startCoordinate, endCoordinate!, Unit.KM)
+                  .floor();
+              documentAccuracyMap[doc] = [acc, distance];
+            } catch (e) {
+              acc = 0;
+              print('error');
+            }
+            print(acc);
+          });
+        });
+      }
+      documentAccuracyMap = sortMap(documentAccuracyMap);
+      print(result);
+    } else {
+      for (QueryDocumentSnapshot doc in snapshot.docs) {
+        documentAccuracyMap[doc] = [];
+      }
+    }
   }
 
   Future<void> getLocation() async {
@@ -131,10 +145,10 @@ class _SearchPersonState extends State<SearchPerson> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeColor,
-        title: const Text('Search'),
+        title: const Text('Search Reports'),
       ),
-      body: SizedBox(
-        width: double.infinity,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -151,8 +165,8 @@ class _SearchPersonState extends State<SearchPerson> {
                 showModalBottomSheet(
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0),
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
                     ),
                   ),
                   context: context,
@@ -205,6 +219,52 @@ class _SearchPersonState extends State<SearchPerson> {
             const SizedBox(
               height: 12,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Material(
+                  elevation: 2,
+                  borderRadius: kDefaultBorderRadius,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2<String>(
+                      value: selectedState,
+                      underline: Container(
+                        color: Colors.white,
+                      ),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedState = newValue!;
+                        });
+                      },
+                      buttonWidth: w * 3 / 4,
+                      dropdownMaxHeight: 300,
+                      dropdownDecoration: const BoxDecoration(
+                        borderRadius: kDefaultBorderRadius,
+                      ),
+                      items: states.map<DropdownMenuItem<String>>((itemValue) {
+                        return DropdownMenuItem(
+                          value: itemValue,
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                itemValue,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            ),
             MyElevatedButton(
               onPress: () async {
                 try {
@@ -222,18 +282,12 @@ class _SearchPersonState extends State<SearchPerson> {
                       throw 'Cannot proceed without GeoLocation';
                     }
                   }
-
                   if (permission == LocationPermission.deniedForever) {
                     throw 'Enable Location Services from settings.';
                   }
 
                   await getLocation();
-
-                  print('before call');
                   await matchFaces();
-
-                  print('after match faces');
-
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -242,8 +296,6 @@ class _SearchPersonState extends State<SearchPerson> {
                       ),
                     ),
                   );
-
-                  print('after push');
 
                   Navigator.of(context).pop();
                 } catch (e) {
@@ -261,10 +313,10 @@ class _SearchPersonState extends State<SearchPerson> {
               },
               buttonLabel: (!isLoading)
                   ? const Text(
-                      'Match Faces',
+                      'Search',
                       style: kButtonTextStyle,
                     )
-                  : const LoadingWidget(newText: 'Matching...'),
+                  : const LoadingWidget(newText: 'Searching...'),
               w: w,
             ),
           ],

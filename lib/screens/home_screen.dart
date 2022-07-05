@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: themeColor,
-          title: const Text('Hello'),
+          title: const Text('Reports'),
           actions: [
             IconButton(
               onPressed: () {

@@ -39,6 +39,7 @@ dependencies:
   flutter_cache_manager: ^3.3.0
   haversine_distance: ^1.2.1
   flutter_phone_direct_caller: ^2.1.1
+  dropdown_button2: ^1.6.3
 
 dev_dependencies:
   flutter_test:
