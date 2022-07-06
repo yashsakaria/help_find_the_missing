@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1021129795084-0h2gphhhk2vv5ttolm0k18cedlvlqieo.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1021129795084-0h2gphhhk2vv5ttolm0k18cedlvlqieo</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1021129795084-bd5esvogdp20qtljecrj4uuh2s1duf6p.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDuetbSldN3JrCq-5rYfZEwsjiGuzSNpEY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1021129795084</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>yashsakaria-icloud.com.helpFindTheMissing</string>
+	<key>PROJECT_ID</key>
+	<string>find-the-missing-587f9</string>
+	<key>STORAGE_BUCKET</key>
+	<string>find-the-missing-587f9.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1021129795084:ios:31d56312651fc3f9e53029</string>
+	<key>DATABASE_URL</key>
+	<string>https://find-the-missing-587f9-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>
