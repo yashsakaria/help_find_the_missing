@@ -645,7 +645,7 @@ class _AddReportScreenState extends State<AddReportScreen> {
             keyboardType: TextInputType.name,
             controller: _lastSeenController,
             decoration: kTextFieldDecoration.copyWith(
-              hintText: 'Last known Location',
+              hintText: 'Ex. Around 1pm at this place',
             ),
           ),
           const SizedBox(

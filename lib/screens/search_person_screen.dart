@@ -267,9 +267,9 @@ class _SearchPersonState extends State<SearchPerson> {
             ),
             MyElevatedButton(
               onPress: () async {
-                try {
-                  if (isLoading) return;
+                if (isLoading) return;
 
+                try {
                   setState(() {
                     isLoading = true;
                   });
